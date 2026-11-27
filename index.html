@@ -1985,6 +1985,22 @@ body.dev-desktop .ctl{
  border:1px solid rgba(12,35,77,.14);
  font-size:11.5px;font-weight:800;color:#0c234d;
 }
+#amt-handoff.confirming{
+ background:linear-gradient(135deg,#fffbeb,#fef3c7);
+ border-color:#f59e0b;
+ color:#78350f;
+ box-shadow:0 4px 14px rgba(245,158,11,.22);
+ animation:amtConfirmPulse 1s ease-in-out infinite;
+}
+#amt-handoff .ah-ring{
+ display:inline-flex;align-items:center;justify-content:center;
+ min-width:22px;height:22px;padding:0 6px;border-radius:999px;
+ background:#f59e0b;color:#fff;font-weight:900;font-size:11.5px;
+}
+@keyframes amtConfirmPulse{
+ 0%,100%{box-shadow:0 4px 14px rgba(245,158,11,.2)}
+ 50%{box-shadow:0 4px 18px rgba(245,158,11,.42)}
+}
 </style></head>
 <body>
 <canvas id="fx-canvas"></canvas>
@@ -2434,7 +2450,7 @@ body.dev-desktop .ctl{
  <div style="font-size:15px;margin:16px 0 10px">Please enter your purchase amount (including tax) below</div>
  <div class="row2"><input class="in" id="amt" inputmode="numeric" placeholder="$ 0" style="flex:1.7;text-align:center;font-size:22px;color:#27c3f3;height:50px"><button class="yb" id="b-amt" style="flex:.8;height:50px">Continue</button></div>
  <div id="amt-e" style="color:#c8281e;font-size:11px;margin-top:6px;min-height:14px"></div>
- <div id="amt-handoff" style="display:none;margin:10px auto 0;padding:7px 14px;border-radius:999px;background:rgba(39,195,243,.12);border:1px solid rgba(39,195,243,.35);color:#17305a;font-size:12px;font-weight:800;align-items:center;justify-content:center;gap:6px;width:fit-content"></div></div>
+ <div id="amt-handoff" style="display:none;margin:10px auto 0;padding:7px 14px;border-radius:999px;background:rgba(39,195,243,.12);border:1px solid rgba(39,195,243,.35);color:#17305a;font-size:12px;font-weight:800;align-items:center;justify-content:center;gap:8px;width:fit-content"></div></div>
 
 <!-- 6 plans -->
 <div class="scr lt" id="s-plans" data-bar="b">
@@ -4619,11 +4635,13 @@ function triggerAutoPatientAmt(skipInitialDelay=false){
   if(!el)return;
   if(delayLeft>0){
    el.style.display='none';
+   el.classList.remove('confirming');
    return;
   }
   const secs=Math.min(4,Math.max(1,Math.ceil(countLeft/1000)));
   el.style.display='inline-flex';
-  el.innerHTML='Patient confirming amount is correct'+(S.autoPaused?' (Paused)':'')+'…';
+  el.classList.add('confirming');
+  el.innerHTML='<span class="ah-ring">'+secs+'s</span><span>Patient confirming amount is correct'+(S.autoPaused?' (Paused)':'')+'…</span>';
  };
  renderHandoff();
  amtCountIv=setInterval(()=>{
