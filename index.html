@@ -468,6 +468,11 @@ body.dev-mobile .ipad:not(.dr),
 body.dev-mobile .ipad:not(.dr) .screen{
  touch-action:pan-y;
 }
+body.dev-mobile .ipad.dr,
+body.dev-mobile .ipad.dr .screen,
+body.dev-mobile .ipad.dr .scr{
+ touch-action:none;
+}
 body.dev-mobile .side{
  position:static !important;
  width:100%;
@@ -4391,16 +4396,17 @@ ip.addEventListener('pointerdown',e=>{
  if(e.button!==undefined&&e.button!==0)return;
  if(S.device==='mobile'&&!dragOn)return;
  if(e.target.closest('button,input,select,a,.lk,.pc,.tile,.ml,.doc,canvas,#b-mkem,.mn,.bk,.lang-pill'))return;
- dg=true;ox=e.clientX;oy=e.clientY;bx=ix;by=iy;ip.style.transition='none';if(dragOn)hideStepArrowNow();
+ dg=true;ox=e.clientX;oy=e.clientY;bx=ix;by=iy;ip.style.transition='none';if(dragOn){hideStepArrowNow();if(e.cancelable)e.preventDefault();}
  try{if(e.pointerId!==undefined)ip.setPointerCapture(e.pointerId)}catch(err){}
  if(dragOn)tick();
-});
+},{passive:false});
 addEventListener('pointermove',e=>{
  if(!dg)return;
+ if(e.cancelable)e.preventDefault();
  ix=bx+(e.clientX-ox)/zf;iy=by+(e.clientY-oy)/zf;
  ip.style.transform='translate('+ix+'px,'+iy+'px)';
  if(dragOn)tick();
-});
+},{passive:false});
 const endIpadDrag=e=>{
  if(!dg)return;
  dg=false;
