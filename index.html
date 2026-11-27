@@ -4623,7 +4623,7 @@ function triggerAutoPatientAmt(skipInitialDelay=false){
   }
   const secs=Math.min(4,Math.max(1,Math.ceil(countLeft/1000)));
   el.style.display='inline-flex';
-  el.innerHTML='📱 Handing iPad back to patient in <b>'+secs+'</b>'+(S.autoPaused?' (Paused)':'')+'…';
+  el.innerHTML='Patient confirming amount is correct'+(S.autoPaused?' (Paused)':'')+'…';
  };
  renderHandoff();
  amtCountIv=setInterval(()=>{
