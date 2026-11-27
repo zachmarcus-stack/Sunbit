@@ -67,6 +67,48 @@ body:after{width:420px;height:420px;background:rgba(251,191,18,.18);bottom:-110p
  z-index:272;opacity:0;pointer-events:none;
  transition:opacity .28s ease;
 }
+body.tut-step5-on .spot-dim.on{
+ background:rgba(2,5,14,.84) !important;
+ z-index:272 !important;
+}
+body.tut-step5-on .ctl,
+body.tut-step5-on .ipad-col,
+body.tut-step5-on .phone-box,
+body.tut-step5-on .sb-wrap,
+body.tut-step5-on .step-focus-hdr{
+ filter:brightness(.16) !important;
+ transition:filter .25s ease !important;
+}
+body.tut-step5-on .side{
+ z-index:278 !important;
+ position:relative !important;
+ filter:none !important;
+ opacity:1 !important;
+}
+body.tut-step5-on #tut-sample-co,
+body.tut-step5-on .side #tut-sample-co.co.on.m.idle-spot{
+ z-index:280 !important;
+ position:relative !important;
+ background-color:#f3f6fb !important;
+ background-image:linear-gradient(165deg,#f6f8fc 0%,#e9eff8 100%) !important;
+ color:#102247 !important;
+ filter:brightness(.88) !important;
+ -webkit-filter:brightness(.88) !important;
+ opacity:1 !important;
+ border-color:#0ea5e9 !important;
+ outline:3.5px solid #2fd37a !important;
+ outline-offset:3px !important;
+ box-shadow:0 0 0 6px rgba(47,211,122,.42),0 0 28px rgba(47,211,122,.72),0 18px 42px rgba(5,12,30,.5) !important;
+ animation:idlePulse 1.1s ease-in-out infinite !important;
+}
+body.tut-step5-on #tut-sample-co *,
+body.tut-step5-on #tut-sample-co .co-ttl,
+body.tut-step5-on #tut-sample-co small,
+body.tut-step5-on #tut-sample-co .who{
+ filter:none !important;
+ -webkit-filter:none !important;
+ opacity:1 !important;
+}
 .spot-dim.on{opacity:1}
 .spot-dim.tut-click{pointer-events:auto;cursor:pointer}
 body .idle-spot,
@@ -558,13 +600,13 @@ body.dev-mobile .phone-box:not(.on) .phone-lbl{
 }
 body.dev-mobile .phone-box.on{
  position:fixed;
- top:50%;
+ top:34%;
  bottom:auto;
  left:50% !important;
  right:auto !important;
  align-items:center;
  transform-origin:center center;
- transform:translate3d(-50%,-50%,0) scale(.92);
+ transform:translate3d(-50%,-50%,0) scale(.84);
  transition:transform .44s cubic-bezier(.18,1.18,.32,1);
  z-index:265;
 }
@@ -609,13 +651,13 @@ body.dev-mobile .sb-wrap:not(.on) .phone-lbl{
 }
 body.dev-mobile .sb-wrap.on{
  position:fixed;
- top:50%;
+ top:34%;
  bottom:auto;
  left:50% !important;
  right:auto !important;
  align-items:center;
  transform-origin:center center;
- transform:translate3d(-50%,-50%,0) scale(.92);
+ transform:translate3d(-50%,-50%,0) scale(.84);
  transition:transform .44s cubic-bezier(.18,1.18,.32,1);
  z-index:265;
 }
@@ -1800,7 +1842,7 @@ body.dev-mobile .sb-wrap:not(.on) .sb-quip.on:after{
 /* Bronze Tier Unlocked Modal & Slide-to-Activate Extra Cash Pill */
 .sb-unlock-ov{
  position:absolute;inset:0;background:rgba(13,33,89,.48);backdrop-filter:blur(3px);
- display:none;align-items:flex-end;justify-content:center;padding:28px 10px 16px;z-index:12;
+ display:none;align-items:center;justify-content:center;padding:28px 10px 24px;z-index:12;
 }
 .sb-unlock-ov.on{display:flex;animation:fadeIn .38s cubic-bezier(.22,1,.36,1) forwards}
 @keyframes sbUnlockPop{
@@ -4137,12 +4179,13 @@ function syncTyStep(sweep=true){
   overBtn.disabled=!tyReady;
   overBtn.title=tyReady?'Start the demo over':'Complete the Sunbeast Extra Cash & patient email steps first';
  }
+ const locText=S.device==='mobile'?'on the side':'at the bottom';
  if(needsSb){
-  callout('Reminder: Open Sunbeast &amp; activate Extra Cash','You unlocked <b>Bronze</b> (+$10 bonus)! Open <b>'+mWho()+'’s Sunbeast</b> phone at the bottom, tap the <b>Sunbeast</b> app, and slide to activate <b>Extra Cash</b> ($7/purchase).','m');
+  callout('Reminder: Open Sunbeast &amp; activate Extra Cash','You unlocked <b>Bronze</b> (+$10 bonus)! Open <b>'+mWho()+'’s Sunbeast</b> phone '+locText+', tap the <b>Sunbeast</b> app, and slide to activate <b>Extra Cash</b> ($7/purchase).','m');
  }else if(sbOpen && !S.postEmailViewed){
   callout('Extra Cash activated! Close your Sunbeast phone','Tap <b>'+mWho()+'’s Sunbeast</b> tab (or anywhere outside the phone) to close it before moving to the patient’s confirmation email.','m');
  }else if(!S.postEmailViewed){
-  callout('Check the patient’s confirmation email','Now open <b>Patient’s Phone (Adrian)</b> at the bottom, tap the <b>Mail</b> app, and open <b>Your Sunbit Financing Agreement</b> to review the patient’s receipt.','p');
+  callout('Check the patient’s confirmation email','Now open <b>Patient’s Phone (Adrian)</b> '+locText+', tap the <b>Mail</b> app, and open <b>Your Sunbit Financing Agreement</b> to review the patient’s receipt.','p');
  }else{
   callout('Everything is done — click Start over!','You completed the entire Sunbit transaction, activated <b>Sunbeast Extra Cash</b>, and verified both the merchant and patient confirmation emails. Click <b>Start over</b> on the iPad whenever you’re ready to go again!','m');
  }
@@ -5324,7 +5367,9 @@ function placeSpotlightPointer(el,label,subText='',isTut=false){
  if(el.id==='auto-ctl')positionAutoCtl();
  const r=getElVisualRect(el)||el.getBoundingClientRect();
  if(!r.width||!r.height)return false;
+ const skipSideElevate = Boolean(isTut && el && el.closest && el.closest('.side'));
  ['ctl','ipad-col','ipad','side','phone-box','sb-wrap','pre-card','mb'].forEach(cls=>{
+  if(cls === 'side' && skipSideElevate)return;
   const anc=el.closest('.'+cls);
   if(anc){anc.classList.add('tut-elevate');idleElevEls.push(anc);}
  });
@@ -5363,52 +5408,83 @@ function setTutAutoBarPreview(showBar){
  const ac=$('#auto-ctl');
  if(ac)ac.style.display='';
 }
+let tutSampleCo=null;
+function showTutStep1Preview(){
+ if(!tutSampleCo){
+  tutSampleCo=document.createElement('div');
+  tutSampleCo.id='tut-sample-co';
+  tutSampleCo.className='co m';
+  tutSampleCo.style.marginTop='4px';
+  const anchor=$('#step-focus-hdr')||$('#co');
+  if(anchor && anchor.parentNode){
+   anchor.parentNode.insertBefore(tutSampleCo,anchor.nextSibling);
+  }
+ }
+ tutSampleCo.className='co on m idle-spot';
+ tutSampleCo.innerHTML='<span class="who">'+roleTag('m',false)+'</span><span class="co-ttl">Step 1: Start the demo</span><small>This is an example step box you will see that will give directions for what to do next, and a finger pointer (👆) points to what needs to be done next.</small>';
+}
+function hideTutStep1Preview(){
+ document.body.classList.remove('tut-step5-on');
+ if(tutSampleCo){
+  tutSampleCo.classList.remove('idle-spot');
+  tutSampleCo.className='co m';
+  tutSampleCo.innerHTML='';
+ }
+}
 const TUT_STEPS=[
  {
+  onShow:()=>hideTutStep1Preview(),
   el:()=>$('#d-role'),
-  title:'1/7 · Switch Demo Mode Anytime',
+  title:'1/8 · Switch Demo Mode Anytime',
   sub:'Toggle between playing Both Roles yourself or letting Auto-Patient complete the patient’s steps.',
   next:'Next →'
  },
  {
-  onShow:()=>{setTutAutoBarPreview(true);positionAutoCtl();},
+  onShow:()=>{setTutAutoBarPreview(true);positionAutoCtl();hideTutStep1Preview();},
   el:()=>$('#auto-ctl'),
-  title:'2/7 · Auto-Patient Playback Controls',
+  title:'2/8 · Auto-Patient Playback Controls',
   sub:'When Auto-Patient is active, Replay Step, Pause, and Speed (1× / 0.5× / 0.25×) appear right here in the top toolbar.',
   next:'Next →'
  },
  {
-  onShow:()=>setTutAutoBarPreview(false),
+  onShow:()=>{setTutAutoBarPreview(false);hideTutStep1Preview();},
   el:()=>$('#d-back'),
-  title:'3/7 · Go Back Anytime',
+  title:'3/8 · Go Back Anytime',
   sub:'Need to revisit a screen? Click ‹ Back a step in the top left—or use ‹ Back inside the iPad.',
   next:'Next →'
  },
  {
-  onShow:()=>setTutAutoBarPreview(false),
+  onShow:()=>{setTutAutoBarPreview(false);hideTutStep1Preview();},
   el:()=>$('#d-help'),
-  title:'4/7 · Need a Hint? Click Hint!',
+  title:'4/8 · Need a Hint? Click Hint!',
   sub:'If you ever get lost on any step, click the Hint button here to highlight what to do next.',
   next:'Next →'
  },
  {
-  onShow:()=>setTutAutoBarPreview(false),
+  onShow:()=>{setTutAutoBarPreview(false);document.body.classList.add('tut-step5-on');showTutStep1Preview();},
+  el:()=>tutSampleCo||$('#co'),
+  title:'5/8 · Step Boxes & Finger Pointer',
+  sub:'Step boxes show each step (e.g., Step 1: Start the demo), and the finger pointer points to what needs to be done next.',
+  next:'Next →'
+ },
+ {
+  onShow:()=>{setTutAutoBarPreview(false);hideTutStep1Preview();},
   el:()=>$('#pat-lbl')||$('#phone-box'),
-  title:'5/7 · Patient’s Phone (Email Verification)',
+  title:'6/8 · Patient’s Phone (Email Verification)',
   sub:'Click here anytime to open Adrian’s phone—this is where the patient verifies their email address and receives their agreement.',
   next:'Next →'
  },
  {
-  onShow:()=>setTutAutoBarPreview(false),
+  onShow:()=>{setTutAutoBarPreview(false);hideTutStep1Preview();},
   el:()=>$('#sb-lbl')||$('#sb-wrap'),
-  title:'6/7 · Your Phone (Sunbeast App)',
+  title:'7/8 · Your Phone (Sunbeast App)',
   sub:'Click here to open your Sunbeast rewards app, track your points (+50 for approval, +400 for purchase), and activate Extra Cash.',
   next:'Next →'
  },
  {
-  onShow:()=>setTutAutoBarPreview(false),
+  onShow:()=>{setTutAutoBarPreview(false);hideTutStep1Preview();},
   el:()=>$('#ipad'),
-  title:'7/7 · Drag the iPad to Scan',
+  title:'8/8 · Drag the iPad to Scan',
   sub:'On the ID & Debit Card steps, click & drag the iPad onto the card to scan it!',
   next:'Start Demo! ✓'
  }
@@ -5432,6 +5508,7 @@ function endQuickTutorial(){
  const wasActive=S.tutActive;
  tutIdx=-1;
  S.tutActive=false;
+ hideTutStep1Preview();
  setTutAutoBarPreview(false);
  clearIdleHint();
  if(wasActive && cur==='welcome'){
@@ -5473,6 +5550,17 @@ if($('#spot-dim'))$('#spot-dim').onclick=e=>{
   resetIdle();
  }
 };
+function advanceTutorialOnDocClick(e){
+ if(tutIdx<0)return;
+ if(e.target && e.target.closest && e.target.closest('.ptr-acts'))return;
+ e.preventDefault();
+ e.stopPropagation();
+ sfxPop();
+ tutIdx++;
+ if(tutIdx>=TUT_STEPS.length)endQuickTutorial();
+ else renderQuickTutorial();
+}
+document.addEventListener('click',advanceTutorialOnDocClick,true);
 function getNextTarget(){
  if($('#sb-intro-ov')?.classList.contains('on'))return[$('#sb-intro-go'),'Click Got it to start the demo'];
  if($('#pre-ov').classList.contains('on')){if($('#pre-step3')?.style.display!=='none')return[$('#pre-go'),'Choose device & click Start Demo'];if($('#pre-step2')?.style.display!=='none')return[$('#pre-next2'),'Choose mode & click Next'];return[$('#pre-name').value.trim()?$('#pre-next'):$('#pre-name'),'Enter your name & click Next'];}
